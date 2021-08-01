@@ -5,16 +5,18 @@ import './App.css';
 
 
 function App() {
+
   const [selectedFileFollowers, setFileFollowers] = useState("");
   const [selectedFileFollowing, setFileFollowing] = useState("");
   const [followersList, setFollowers] = useState(null);
   const [followingList, setFollowing] = useState(null);
   const [appState, setAppState] = useState(
-    { resultReady: false, 
-      unfollow_list:[]
+    {
+      resultReady: false,
+      unfollow_list: []
     }
   );
-  
+
 
   const handleChangeFollowers = e => {
     const fileReader = new FileReader();
@@ -67,11 +69,15 @@ function App() {
   //Function to find people who are not following you but you are following
   const findUnfollowers = () => {
     if (selectedFileFollowers !== "" && selectedFileFollowing !== "") {
-      let mUnfollowing = followersList.filter(f => !followingList.includes(f));
+      let mUnfollowing = followingList.filter(f => !followersList.includes(f));
       console.log(mUnfollowing);
-      setAppState({ resultReady: true ,unfollow_list:mUnfollowing});
+      setAppState({ resultReady: true, unfollow_list: mUnfollowing });
     }
   }
+
+
+  
+
 
   const showResult = () => {
 
@@ -79,12 +85,12 @@ function App() {
     const listItems = appState.unfollow_list.map((u) =>
       <li>{u}</li>
     );
-    
+
     return (
 
       <div>
 
-        <ul>
+        <ul className="id_list">
 
           {listItems}
         </ul>
@@ -92,17 +98,48 @@ function App() {
     );
 
   }
+  const hiddenFollowersFileInput = React.useRef(null);
+  const hiddenFollowingFileInput = React.useRef(null);
+
+  
+  //Simulating click of followers file input
+  const clickFollowersInput = (event) => {
+    hiddenFollowersFileInput.current.click();
+  }
+  //Simulating click of folllowing file input
+  const clickFollowingInput = (event) => {
+    hiddenFollowingFileInput.current.click();
+  }
   return (
-    <div>
+    <div className="inputs_div_container">
+      <div className="inputs_content_div">
 
-      <h1>Select json file</h1>
-      <label>followers.json</label>
-      <input type='file' onChange={(e) => { handleChangeFollowers(e) }} />
-      <label>following.json</label>
-      <input type='file' onChange={(e) => { handleChangeFollowing(e) }} />
-      <button onClick={findUnfollowers}>Who is not following</button>
-      {appState.resultReady ? showResult() : <div></div>}
 
+        <h3>Select json file</h3>
+        <div className="file_input_container">
+          <label>Choose followers list</label>
+          <button onClick={clickFollowersInput}>Select file</button>
+          <input id="followers_input"
+            type='file'
+            onChange={(e) => { handleChangeFollowers(e) }}
+            style={{ display: 'none' }}
+            ref={hiddenFollowersFileInput}
+          />
+        </div>
+        <div className="file_input_container">
+          <label>Choose following list</label>
+          
+          <button onClick={clickFollowingInput}>Select file</button>
+          <input id="following_input"
+            type='file'
+            onChange={(e) => { handleChangeFollowing(e) }}
+            style={{ display: 'none' }}
+            ref={hiddenFollowingFileInput}
+          />
+        </div>
+        <button onClick={findUnfollowers}>Who is not following</button>
+        {appState.resultReady ? showResult() : <div></div>}
+      </div>
     </div>
   );
 

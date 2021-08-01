@@ -6,8 +6,31 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+#main_div{
+  display: flex;
+  flex-direction: column;
+}
+.header_container{
+  display: flex;
+  flex-direction: column;
+  background-color: #4E3CC9;
+  color:#ffffff;
+  justify-content: center;
+  align-items: center;
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.inputs_div_container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.inputs_div_container input[type='file']{
+  border: none;
+  background-color: #808080;
+  padding: 12px 16px;
+  
 }
