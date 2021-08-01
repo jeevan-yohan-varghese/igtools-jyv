@@ -176,7 +176,7 @@ function App() {
             style={{ display: 'none' }}
             ref={hiddenFollowersFileInput}
           />
-          {!followersFileStatus.empty? <div><img src={icon_verified} className="small_icon"/>
+          {!followersFileStatus.empty? <div><img src={icon_verified} className="small_icon" alt="file ok icon"/>
           <p>{followersFileStatus.msg}</p>
           </div>
           :
@@ -193,7 +193,7 @@ function App() {
             style={{ display: 'none' }}
             ref={hiddenFollowingFileInput}
           />
-          {!followingFileStatus.empty? <div><img src={icon_verified} className="small_icon"/>
+          {!followingFileStatus.empty? <div><img src={icon_verified} className="small_icon" alt="file ok icon"/>
           <p>{followingFileStatus.msg}</p>
           </div>
           :
