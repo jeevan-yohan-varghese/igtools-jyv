@@ -1,3 +1,7 @@
+
+*{
+  box-sizing: border-box;
+}
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -28,9 +32,68 @@ code {
   flex-direction: column;
   align-items: center;
 }
-.inputs_div_container input[type='file']{
-  border: none;
-  background-color: #808080;
+#file_inputs_wrapper{
+  display: flex;
+}
+.file_input_container{
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+.file_input_container button{
+  width: 100%;
+}
+.small_icon{
+  width: 25px;
+  margin-top: 4px;
+}
+.err_msg{
+  color:#D81E5B;
+}
+
+
+#following_input_container{
+  margin-left: 12px;
+}
+#followers_input_container{
+  margin-right: 12px;
+}
+
+.input_btn{
+  border:1px solid #808080;
+  background:none;
   padding: 12px 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 12px;
+}
+#primary_btn_wrapper{
+  text-align: center;
+  margin-top: 20px;
+}
+.primary_btn{
+  border:none;
+  background-color: #4E3CC9;
+  color: white;
+  padding: 16px 20px;
+  border-radius: 4px;
   
+}
+
+.id_list{
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  
+}
+.id_list li{
+  display: inline-flex;
+ 
+  margin-top: 12px;
+  padding: 8px 12px;
+}
+.id_list li a{
+  text-decoration: none;
+  color:#000000;
+
 }

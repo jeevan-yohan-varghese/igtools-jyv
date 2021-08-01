@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
-
+import icon_verified from './images/verified.svg';
 
 
 function App() {
@@ -10,6 +10,14 @@ function App() {
   const [selectedFileFollowing, setFileFollowing] = useState("");
   const [followersList, setFollowers] = useState(null);
   const [followingList, setFollowing] = useState(null);
+  const[followersFileStatus,setFollowersFileStatus]=useState({
+    msg:"",
+    empty:true
+  });
+  const[followingFileStatus,setFollowingFileStatus]=useState({
+    msg:"",
+    empty:true
+  });
   const [appState, setAppState] = useState(
     {
       resultReady: false,
@@ -19,52 +27,87 @@ function App() {
 
 
   const handleChangeFollowers = e => {
-    const fileReader = new FileReader();
-    fileReader.readAsText(e.target.files[0], "UTF-8");
-    fileReader.onloadend = () => {
-      //console.log("e.target.result", e.target.result);
-      setFileFollowers(JSON.parse(fileReader.result));
-    };
+    try{
+      const fileReader = new FileReader();
+      fileReader.readAsText(e.target.files[0], "UTF-8");
+      fileReader.onload = (r) => {
+        //console.log("e.target.result", e.target.result);
+        try{
+          setFileFollowers(JSON.parse(r.target.result));
+          console.log(e.target.files[0].name);
+          setFollowersFileStatus({msg:r.target.fileName,empty:false})
+        }catch(e){
+          console.log("Exception occured invalid file");
+          setFollowersFileStatus({msg:"Invalid file",empty:true})
+        }
+        
+      };
+    }catch(e){
+      console.log("Exception occured");
+      setFollowersFileStatus({msg:"Invalid file",empty:true})
+    }
+   
   };
 
   const handleChangeFollowing = e => {
-    const fileReader = new FileReader();
-    fileReader.readAsText(e.target.files[0], "UTF-8");
-    fileReader.onloadend = () => {
-      //console.log("e.target.result", e.target.result);
-      setFileFollowing(JSON.parse(fileReader.result));
-    };
+    try{
+      const fileReader = new FileReader();
+      fileReader.readAsText(e.target.files[0], "UTF-8");
+      fileReader.onloadend = () => {
+        //console.log("e.target.result", e.target.result);
+        try{
+          setFileFollowing(JSON.parse(fileReader.result));
+          setFollowingFileStatus({msg:"",empty:false})
+        }catch(e){
+          setFollowingFileStatus({msg:"Invalid file",empty:true})
+        }
+      
+      };
+    }catch(e){
+      setFollowingFileStatus({msg:"Invalid file",empty:true})
+    }
+   
   };
   useEffect(() => {
     let followers_id = [];
-    if (selectedFileFollowers) {
+    try{
+      if (selectedFileFollowers) {
 
-      const followers_list = selectedFileFollowers.relationships_followers;
-      followers_list.forEach(element => {
-        followers_id.push(element.string_list_data[0].value);
-      });
-      followers_id.forEach((e) => {
-        console.log(e);
-      });
-      setFollowers(followers_id);
-
+        const followers_list = selectedFileFollowers.relationships_followers;
+        followers_list.forEach(element => {
+          followers_id.push(element.string_list_data[0].value);
+        });
+        followers_id.forEach((e) => {
+          console.log(e);
+        });
+        setFollowers(followers_id);
+  
+      }
+    }catch(e){
+      setFollowersFileStatus({msg:"Wrong json format",empty:true})
     }
+    
   }, [selectedFileFollowers]);
 
   useEffect(() => {
     let following_id = [];
-    if (selectedFileFollowing) {
+    try{
+      if (selectedFileFollowing) {
 
-      const following_list = selectedFileFollowing.relationships_following;
-      following_list.forEach(element => {
-        following_id.push(element.string_list_data[0].value);
-      });
-      following_id.forEach((e) => {
-        console.log(e);
-      });
-      setFollowing(following_id);
-
+        const following_list = selectedFileFollowing.relationships_following;
+        following_list.forEach(element => {
+          following_id.push(element.string_list_data[0].value);
+        });
+        following_id.forEach((e) => {
+          console.log(e);
+        });
+        setFollowing(following_id);
+  
+      }
+    }catch(e){
+      setFollowingFileStatus({msg:"Wrong json format",empty:true})
     }
+  
   }, [selectedFileFollowing]);
   //Function to find people who are not following you but you are following
   const findUnfollowers = () => {
@@ -82,8 +125,13 @@ function App() {
   const showResult = () => {
 
     console.log("showResult called")
-    const listItems = appState.unfollow_list.map((u) =>
-      <li>{u}</li>
+    const listItems = appState.unfollow_list.map((u) =>{
+    
+      const hrefStr="https://instagram.com/"+u;
+      return <li><a href={hrefStr} target="_blank" rel="noreferrer">{u}</a></li>
+    }
+      
+     
     );
 
     return (
@@ -116,28 +164,46 @@ function App() {
 
 
         <h3>Select json file</h3>
-        <div className="file_input_container">
-          <label>Choose followers list</label>
-          <button onClick={clickFollowersInput}>Select file</button>
+        <div id="file_inputs_wrapper">
+
+        
+        <div className="file_input_container" id="followers_input_container">
+          <label>Choose followers list <b>(followers.json)</b></label>
+          <button onClick={clickFollowersInput} className="input_btn">Select file</button>
           <input id="followers_input"
             type='file'
             onChange={(e) => { handleChangeFollowers(e) }}
             style={{ display: 'none' }}
             ref={hiddenFollowersFileInput}
           />
+          {!followersFileStatus.empty? <div><img src={icon_verified} className="small_icon"/>
+          <p>{followersFileStatus.msg}</p>
+          </div>
+          :
+          followersFileStatus.msg!==""?<p className="err_msg">{followersFileStatus.msg}</p>:""}
+         
         </div>
-        <div className="file_input_container">
-          <label>Choose following list</label>
+        <div className="file_input_container" id="following_input_container">
+          <label>Choose following list <b>(following.json)</b></label>
           
-          <button onClick={clickFollowingInput}>Select file</button>
+          <button onClick={clickFollowingInput} className="input_btn">Select file</button>
           <input id="following_input"
             type='file'
             onChange={(e) => { handleChangeFollowing(e) }}
             style={{ display: 'none' }}
             ref={hiddenFollowingFileInput}
           />
+          {!followingFileStatus.empty? <div><img src={icon_verified} className="small_icon"/>
+          <p>{followingFileStatus.msg}</p>
+          </div>
+          :
+          followingFileStatus.msg!==""?<p className="err_msg">{followingFileStatus.msg}</p>:""}
         </div>
-        <button onClick={findUnfollowers}>Who is not following</button>
+        </div>
+        <div id="primary_btn_wrapper">
+
+        <button onClick={findUnfollowers} className="primary_btn">FIND UNFOLLOWERS</button>
+        </div>
         {appState.resultReady ? showResult() : <div></div>}
       </div>
     </div>
