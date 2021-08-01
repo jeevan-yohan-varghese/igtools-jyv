@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Find your instagram followers and following
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a simple project made using React
 
 ## Available Scripts
 
