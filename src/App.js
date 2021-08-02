@@ -25,6 +25,11 @@ function App() {
     }
   );
 
+  const [secondList,setSecondList]= useState({
+    resultReady: false,
+    nonfollowing_list: []
+  });
+
 
   const handleChangeFollowers = e => {
     try{
@@ -109,20 +114,29 @@ function App() {
     }
   
   }, [selectedFileFollowing]);
-  //Function to find people who are not following you but you are following
-  const findUnfollowers = () => {
+
+
+  const findFollowers = () => {
     if (selectedFileFollowers !== "" && selectedFileFollowing !== "") {
+        //Function to find people who are not following you but you are following
+
       let mUnfollowing = followingList.filter(f => !followersList.includes(f));
       console.log(mUnfollowing);
       setAppState({ resultReady: true, unfollow_list: mUnfollowing });
+
+      //Function to find people who are  following you but you are not following
+      let mNonfollowing = followersList.filter(f => !followingList.includes(f));
+      console.log(mNonfollowing);
+      setSecondList({ resultReady: true, nonfollowing_list: mNonfollowing });
     }
   }
+
 
 
   
 
 
-  const showResult = () => {
+  const showUnFollowers = () => {
 
     console.log("showResult called")
     const listItems = appState.unfollow_list.map((u) =>{
@@ -136,8 +150,33 @@ function App() {
 
     return (
 
-      <div>
+      <div className="list_div">
+        <h2>Unfollowers List</h2>
+        <ul className="id_list">
 
+          {listItems}
+        </ul>
+      </div>
+    );
+
+  }
+
+  const showNonFollowing = () => {
+
+    console.log("showResult called")
+    const listItems = secondList.nonfollowing_list.map((u) =>{
+    
+      const hrefStr="https://instagram.com/"+u;
+      return <li><a href={hrefStr} target="_blank" rel="noreferrer">{u}</a></li>
+    }
+      
+     
+    );
+
+    return (
+
+      <div className="list_div">
+        <h2>Non Following List</h2>
         <ul className="id_list">
 
           {listItems}
@@ -159,6 +198,7 @@ function App() {
     hiddenFollowingFileInput.current.click();
   }
   return (
+    <div className="wrapper">
     <div className="inputs_div_container">
       <div className="inputs_content_div">
 
@@ -202,10 +242,15 @@ function App() {
         </div>
         <div id="primary_btn_wrapper">
 
-        <button onClick={findUnfollowers} className="primary_btn">FIND UNFOLLOWERS</button>
+        <button onClick={findFollowers} className="primary_btn">FIND</button>
+       
+
         </div>
-        {appState.resultReady ? showResult() : <div></div>}
       </div>
+
+    </div>
+    {appState.resultReady && secondList.resultReady ? <div className="result_container">{showUnFollowers()}{showNonFollowing()}</div>:<div></div>}
+   
     </div>
   );
 
