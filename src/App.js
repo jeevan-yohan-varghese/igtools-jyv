@@ -33,6 +33,7 @@ function App() {
     nonfollowing_list: []
   });
 
+  const ipp = require('instagram-profile-picture');
 
   const handleChangeFollowers = e => {
     try{
@@ -145,7 +146,12 @@ function App() {
     const listItems = appState.unfollow_list.map((u) =>{
     
       const hrefStr="https://instagram.com/"+u;
-      return <li><a href={hrefStr} target="_blank" rel="noreferrer">{u}</a></li>
+      let url=ipp(hrefStr).then(user => {
+        console.log(user);
+        // => https://scontent-sit4-1.cdninstagram.com/7...jpg
+        return user;
+      });
+      return <li><img width="25px" src={url} alt="profile"/><a href={hrefStr} target="_blank" rel="noreferrer">{u}</a></li>
     }
       
      
