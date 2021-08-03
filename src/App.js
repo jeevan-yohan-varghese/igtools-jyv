@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-
+import Help from './help';
 import icon_verified from './images/verified.svg';
+import ic_help from './images/help.svg';
+import Fade from 'react-reveal/Fade';
 
 
 function App() {
@@ -10,6 +12,7 @@ function App() {
   const [selectedFileFollowing, setFileFollowing] = useState("");
   const [followersList, setFollowers] = useState(null);
   const [followingList, setFollowing] = useState(null);
+  const [showHelp,setShowHelp]=useState(false);
   const[followersFileStatus,setFollowersFileStatus]=useState({
     msg:"",
     empty:true
@@ -203,7 +206,11 @@ function App() {
       <div className="inputs_content_div">
 
 
+        <div id="select_header">
         <h3>Select json file</h3>
+        <img src={ic_help}  alt=""  onClick={()=>setShowHelp(true)}/>
+        </div>
+        
         <div id="file_inputs_wrapper">
 
         
@@ -250,6 +257,8 @@ function App() {
 
     </div>
     {appState.resultReady && secondList.resultReady ? <div className="result_container">{showUnFollowers()}{showNonFollowing()}</div>:<div></div>}
+   
+   {showHelp? <Fade><Help/></Fade>:""}
    
     </div>
   );

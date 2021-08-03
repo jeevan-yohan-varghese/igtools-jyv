@@ -26,11 +26,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+#select_header{
+  display: flex;
+  align-items: center;
+}
+#select_header a{
+  text-decoration: none;
+}
+#select_header img{
+  width: 25px;
+  margin-left: 8px;
+  cursor: pointer;
+}
 .wrapper{
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 .inputs_div_container{
   display: flex;
   flex-direction: column;
