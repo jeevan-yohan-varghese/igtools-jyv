@@ -146,7 +146,7 @@ function App() {
     const listItems = appState.unfollow_list.map((u) =>{
     
       const hrefStr="https://instagram.com/"+u;
-      let url=ipp(hrefStr).then(user => {
+      let url=ipp(u).then(user => {
         console.log(user);
         // => https://scontent-sit4-1.cdninstagram.com/7...jpg
         return user;
